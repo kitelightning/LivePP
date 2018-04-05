@@ -1,0 +1,27 @@
+{
+	"FileVersion": 3,
+	"Version": 0,
+	"VersionName": "0.5.0",
+	"FriendlyName": "LivePP",
+	"Description": "A Plugin wrapper for Molecular Matters L++ plugin",
+	"Category": "Programming",
+	"CreatedBy": "Kite & Lightning",
+	"CreatedByURL": "https://bebylon.world/",
+	"DocsURL": "https://molecular-matters.com/docs/livepp/documentation.html",
+	"MarketplaceURL": "",
+	"SupportURL": "https://molecular-matters.com/products_livepp.html",
+	"CanContainContent": true,
+	"IsBetaVersion": true,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "LivePP",
+			"Type": "Developer",
+			"LoadingPhase": "PostEngineInit",
+			"WhitelistPlatforms": [
+				"Win32",
+				"Win64"
+			]
+		}
+	]
+}
