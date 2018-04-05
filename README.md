@@ -1,8 +1,9 @@
 ![](Resources/Icon128.png) 
 # UE4 LivePP: C/C++ live coding
-A UE4 plugin wrapper for the amazing Molecular Musing's Live++ Hot-Reloading Library. (https://molecular-matters.com/products_livepp.html)
+A UE4 plugin wrapper for the amazing Molecular Musing's Live++ Hot-Reloading Library. (https://molecular-matters.com/products_livepp.html).
 One day we will get sub-second iteration in Unreal Engine 4.
 
+![](doc/Screenshot.png) 
 
 Documentation:
 https://molecular-matters.com/docs/livepp/documentation.html#API_disabling_optimizations
