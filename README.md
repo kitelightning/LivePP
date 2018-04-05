@@ -6,7 +6,7 @@ One day we will get sub-second iteration in Unreal Engine 4.
 ![](doc/Screenshot.png) 
 
 Documentation:
-https://molecular-matters.com/docs/livepp/documentation.html#API_disabling_optimizations
+https://molecular-matters.com/docs/livepp/documentation.html
 
 Status
 ----------
