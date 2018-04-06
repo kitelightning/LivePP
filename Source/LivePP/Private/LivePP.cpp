@@ -72,12 +72,21 @@ void FLivePPModule::StartupModule()
 
         for (const FModuleStatus& ModuleStatus : ModuleStatuses)
         {
-            if (
-                   ModuleStatus.bIsLoaded 
-                && (ModuleStatus.bIsGameModule || FPaths::IsSamePath(gameBinaryDir, FPaths::GetPath(ModuleStatus.FilePath)) )
-               )
+            if (!ModuleStatus.bIsLoaded)
+            { continue; }
+
+            const bool bShouldHook =
+                   EnumHasAllFlags(moduelFilter, ELPPHookFilter::All)
+                || EnumHasAllFlags(moduelFilter, ELPPHookFilter::Game)        && (ModuleStatus.bIsGameModule                                               )
+                || EnumHasAllFlags(moduelFilter, ELPPHookFilter::GameProject) && (FPaths::IsSamePath(gameBinaryDir, FPaths::GetPath(ModuleStatus.FilePath)))
+                || EnumHasAllFlags(moduelFilter, ELPPHookFilter::CoreEngine)  && (CoreEngineModuleNames.Contains(ModuleStatus.Name)                        )
+                || EnumHasAllFlags(moduelFilter, ELPPHookFilter::CoreEditor)  && (CoreEditorModuleNames.Contains(ModuleStatus.Name)                        )
+                || EnumHasAllFlags(moduelFilter, ELPPHookFilter::CustomList)  && (CustomModuleNames.Contains(ModuleStatus.Name)                            );
+
+            if (bShouldHook)
             {
-                lpp::lppEnableModuleSync(static_cast<HMODULE>(lppHModule), *ModuleStatus.FilePath);
+                    if (bHookImports) { lpp::lppEnableAllModulesSync(static_cast<HMODULE>(lppHModule), *ModuleStatus.FilePath); }
+                else                  { lpp::lppEnableModuleSync    (static_cast<HMODULE>(lppHModule), *ModuleStatus.FilePath); }
             }
         }
 

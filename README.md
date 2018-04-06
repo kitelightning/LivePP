@@ -59,7 +59,8 @@ How to Use
 				 GlobalCompileEnvironment.AdditionalArguments = Rules.AdditionalCompilerArguments;
 				 GlobalLinkEnvironment.AdditionalArguments = Rules.AdditionalLinkerArguments;
 			 -Your game target.cs file:
-				 AdditionalLinkerArguments = "/FUNCTIONPADMIN /Gw";
+				 AdditionalCompilerArguments = "/Gw";
+				 AdditionalLinkerArguments   = "/FUNCTIONPADMIN";
 
 2. Clone this repo into your engine or game plugins directory (eg Plugins\LivePP)
 
