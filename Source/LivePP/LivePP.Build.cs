@@ -14,13 +14,13 @@ public class LivePP : ModuleRules
         System.Action<bool,string> checkAndWarn = (bCondition, buildFlag) => { if (!bCondition) { System.Console.WriteLine("LPP: Build Environment Flag is incorrect: {0} == false", buildFlag); } };
 
         //Ensure PDBs are generated
-        //TODO: ikrimae: #LivePP: This is generating a false negative so disabling
+        //TODO: ikrimae: #ThirdParty-LivePP: This is generating a false negative so disabling
         //checkAndWarn(Target.bUsePDBFiles,                   "Target.bUsePDBFiles"                  );
         checkAndWarn(!Target.bOmitPCDebugInfoInDevelopment, "!Target.bOmitPCDebugInfoInDevelopment");
         checkAndWarn(!Target.bDisableDebugInfo,             "!Target.bDisableDebugInfo"            );
         checkAndWarn(!Target.bAllowLTCG,                    "!Target.bAllowLTCG"                   );
 
-        //TODO: ikrimae: #LivePP: Future L++ feature - Should be enabled if UHT hooking is implemented in L++
+        //TODO: ikrimae: #ThirdParty-LivePP: Future L++ feature - Should be enabled if UHT hooking is implemented in L++
         //checkAndWarn(!Target.bDisableDebugInfoForGeneratedCode, "!Target.bDisableDebugInfoForGeneratedCode");
 
         //NOTE: UBT Extensions - These have to be placed inside of UBT in SetupEnvironment(). There's no longer a mechanism to control this from game modules or targets

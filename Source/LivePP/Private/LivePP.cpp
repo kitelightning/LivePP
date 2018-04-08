@@ -29,7 +29,7 @@ namespace {
     }
 }
 
-//TODO: ikrimae: #LivePP: Uncomment after testing. Not really sure if there's even a need for it. 
+//TODO: ikrimae: #ThirdParty-LivePP: Uncomment after testing. Not really sure if there's even a need for it. 
 //                        Maybe to mark that hotreload happened and to prevent saving over uassets?
 //LPP_PREPATCH_HOOK(lppPrePatchHookShim);
 //LPP_POSTPATCH_HOOK(lppPostPatchHookShim);
