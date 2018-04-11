@@ -1,7 +1,7 @@
 {
   "FileVersion": 3,
   "Version": 0,
-  "VersionName": "0.5.0",
+  "VersionName": "0.5.0+Lpp-1-0-4",
   "FriendlyName": "LivePP",
   "Description": "A Plugin wrapper for Molecular Matters L++ plugin",
   "Category": "Programming",

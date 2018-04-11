@@ -65,10 +65,10 @@ private:
     FDelegateHandle       syncPointHandle;
     void*	              lppHModule            = nullptr;
 
-    //TODO: ikrimae:      #LivePP: Expose to settings class and test
-    ELPPHookFilter        moduelFilter          = ELPPHookFilter::Game /*ELPPHookFilter::Game | ELPPHookFilter::CoreEngine*/;
-    bool                  bHookImports          = false /* true */;
-    ELPPSyncPointLocation lppHotReloadSyncPoint = ELPPSyncPointLocation::None;
+    //TODO: ikrimae:      #ThirdParty-LivePP: Expose to settings class and test
+    ELPPHookFilter        moduelFilter          = ELPPHookFilter::Game | ELPPHookFilter::GameProject /*| ELPPHookFilter::CoreEngine*/;
+    bool                  bHookImports          = true ;
+    ELPPSyncPointLocation lppHotReloadSyncPoint = ELPPSyncPointLocation::EngineEndFrame;
 
     TArray<FString> CoreEngineModuleNames;
     TArray<FString> CoreEditorModuleNames;

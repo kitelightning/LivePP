@@ -48,17 +48,18 @@ void FLivePPModule::StartupModule()
 
     //Load DLL
     lppHModule = (!IsRunningCommandlet() && !lppDllPath.IsEmpty()) ? FPlatformProcess::GetDllHandle(*lppDllPath) : nullptr;
-    if (lppHModule && !lpp::lppCheckVersion(static_cast<HMODULE>(lppHModule)))
-    {
-        // version mismatch detected
-        UE_LOG(LogLPP, Error, TEXT("Version mismatch detected!"));
-        FPlatformProcess::FreeDllHandle(lppHModule);
-        lppHModule = nullptr;
-    }
-
     if (!lppHModule)
     {
         UE_LOG(LogLPP, Error, TEXT("Could not load external LPPExternalLib. Did you make sure to copy LPP SDK into ThirdParty/LPPExternalLib/LivePP?"));
+        return;
+    }
+
+    if (!lpp::lppCheckVersion(static_cast<HMODULE>(lppHModule)))
+    {
+        // version mismatch detected
+        UE_LOG(LogLPP, Error, TEXT("Could not load external LPPExternalLib. Version mismatch detected!"));
+        FPlatformProcess::FreeDllHandle(lppHModule);
+        lppHModule = nullptr;
         return;
     }
 
