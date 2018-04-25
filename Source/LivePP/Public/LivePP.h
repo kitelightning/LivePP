@@ -62,12 +62,14 @@ public:
     static FSimpleMulticastDelegate PostPatchHook;
 
 private:
+    void*	              lppHModule = nullptr;
     FDelegateHandle       syncPointHandle;
-    void*	              lppHModule            = nullptr;
+    TArray<void*>         lppAsyncLoadTokens;
 
     //TODO: ikrimae:      #ThirdParty-LivePP: Expose to settings class and test
     ELPPHookFilter        moduelFilter          = ELPPHookFilter::Game | ELPPHookFilter::GameProject /*| ELPPHookFilter::CoreEngine*/;
-    bool                  bHookImports          = true ;
+    bool                  bHookImports          = true;
+    bool                  bUseAsyncModuleLoad   = false;
     ELPPSyncPointLocation lppHotReloadSyncPoint = ELPPSyncPointLocation::EngineEndFrame;
 
     TArray<FString> CoreEngineModuleNames;

@@ -95,3 +95,14 @@ How to Use
       - bFasterWithoutUnity = true
      
   The best workflow I've found is use adaptive unity builds for the engine while forcing all game modules to not use unity builds
+
+
+  Troubleshooting:
+  ----------
+  Incredibuild 
+  * Can't find compiler/must override cl/link.exe paths
+		Incredibuild caches the compiler toolchain in a directory and then deletes it after a build so L++ won't be able to find it. 
+		You can manually override the toolchain paths: C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\VC\Tools\MSVC\14.13.26128\bin\Hostx64\x64\cl.exe && C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\VC\Tools\MSVC\14.13.26128\bin\Hostx64\x64\link.exe
+		
+		Watch out for UE4 using 2015 toolchain (default) even if you are generating VS2017 projects.
+		Turned out that even though he had a VS 2017 project and toold VS/UE to use the VS 2017 toolchain, somehow UBT insisted on using VS 2015. The overridden paths would point to his VS 2017 cl.exe, so the compiler would complain about the PCH being from a previous version of the compiler

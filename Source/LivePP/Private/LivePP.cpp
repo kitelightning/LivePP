@@ -1,4 +1,4 @@
-// Copyright Kite & Lightning
+﻿// Copyright Kite & Lightning
 
 #include "LivePP.h"
 #include "Core.h"
@@ -86,10 +86,27 @@ void FLivePPModule::StartupModule()
 
             if (bShouldHook)
             {
-                    if (bHookImports) { lpp::lppEnableAllModulesSync(static_cast<HMODULE>(lppHModule), *ModuleStatus.FilePath); }
-                else                  { lpp::lppEnableModuleSync    (static_cast<HMODULE>(lppHModule), *ModuleStatus.FilePath); }
+                if (bUseAsyncModuleLoad)
+                {
+                        if (bHookImports) { lppAsyncLoadTokens.Add(lpp::lppEnableAllModulesAsync(static_cast<HMODULE>(lppHModule), *ModuleStatus.FilePath)); }
+                    else                  { lppAsyncLoadTokens.Add(lpp::lppEnableModuleAsync(static_cast<HMODULE>(lppHModule), *ModuleStatus.FilePath)); }
+                }
+                else
+                {
+                        if (bHookImports) { lpp::lppEnableAllModulesSync(static_cast<HMODULE>(lppHModule), *ModuleStatus.FilePath); }
+                    else                  { lpp::lppEnableModuleSync(static_cast<HMODULE>(lppHModule), *ModuleStatus.FilePath); }
+                }
             }
         }
+
+        //syncModuleLoadHandle = FCoreDelegates::OnBeginFrame.AddLambda([this] {
+        //    
+        //
+        //
+        //    //Dangerous but ¯\_(ツ)_/¯; make sure to keep as the last line in the lambda as removal
+        //    //will destroy the stack of the lambda
+        //    FCoreDelegates::OnBeginFrame.Remove(syncModuleLoadHandle);
+        //});
 
         //// Defer Level Editor UI extensions until Level Editor has been loaded:
         //if (FModuleManager::Get().IsModuleLoaded("LevelEditor"))
@@ -114,11 +131,26 @@ void FLivePPModule::StartupModule()
         {
         case ELPPSyncPointLocation::EngineBeginFrame:
             syncPointHandle = FCoreDelegates::OnBeginFrame.AddLambda([this] {
+                if (lppAsyncLoadTokens.Num())
+                {
+                    for (void* lppToken : lppAsyncLoadTokens)
+                    { lpp::lppWaitForToken(static_cast<HMODULE>(lppHModule), lppToken); }
+
+                    lppAsyncLoadTokens.Empty();
+                }
                 lpp::lppSyncPoint(static_cast<HMODULE>(this->lppHModule));
             });
             break;
         case ELPPSyncPointLocation::EngineEndFrame:
             syncPointHandle = FCoreDelegates::OnEndFrame.AddLambda([this] {
+                if (lppAsyncLoadTokens.Num())
+                {
+                    for (void* lppToken : lppAsyncLoadTokens)
+                    { lpp::lppWaitForToken(static_cast<HMODULE>(lppHModule), lppToken); }
+
+                    lppAsyncLoadTokens.Empty();
+                }
+
                 lpp::lppSyncPoint(static_cast<HMODULE>(this->lppHModule));
             });
             break;
