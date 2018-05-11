@@ -36,6 +36,9 @@ namespace {
 
 void FLivePPModule::StartupModule()
 {
+    if (IsRunningCommandlet())
+    { return;    }
+
     // Get the base directory of this plugin
     FString baseDir    = IPluginManager::Get().FindPlugin("LivePP").IsValid() ? IPluginManager::Get().FindPlugin("LivePP")->GetBaseDir() : "";
     FString lppDllPath = FPaths::Combine(*baseDir, 
@@ -47,7 +50,7 @@ void FLivePPModule::StartupModule()
     );
 
     //Load DLL
-    lppHModule = (!IsRunningCommandlet() && !lppDllPath.IsEmpty()) ? FPlatformProcess::GetDllHandle(*lppDllPath) : nullptr;
+    lppHModule = !lppDllPath.IsEmpty() ? FPlatformProcess::GetDllHandle(*lppDllPath) : nullptr;
     if (!lppHModule)
     {
         UE_LOG(LogLPP, Error, TEXT("Could not load external LPPExternalLib. Did you make sure to copy LPP SDK into ThirdParty/LPPExternalLib/LivePP?"));

@@ -1,0 +1,48 @@
+Live++ Release Notes: https://molecular-matters.com/products_livepp_release_notes.html
+
+1.1.0 (April 23, 2018)
+
+    Bugfix: potential hang when querying terminated process for page protection
+    Bugfix: crash bug when throwing exceptions in 64-bit applications
+    Bugfix: system tray misbehaving in certain combinations of notifications and focus events
+    Bugfix: compiling to .obj files that contain UTF-8 characters, compiler response file needs ANSI
+    Feature: multi-processor compilation when re-compiling multiple files
+    Feature: terminated processes/clients are automatically detected and disconnected from the server
+    Feature: Live++ instance stays open until the last process terminates or disconnects
+    Feature: process group names are automatically fixed should they contain illegal characters
+    Feature: global COFF stripping when re-compiling multiple files
+    Feature: system tray icon is removed when last process disconnects
+
+1.0.5 (April 12, 2018)
+
+    Bugfix: potential hang due to an endless loop when stripping COFFs
+    Bugfix: potential crash due to out-of-bounds read when reading and reconstructing COFFs
+    Feature: added support for virtual drives
+    Feature: added support for playing sounds on successful and failed re-compiles
+    Feature: minimizing Live++ now sends it into the system tray, where progress is shown via animated icons
+
+1.0.4 (April 10, 2018)
+
+    Feature: added continuous compilation mode
+    Feature: optimized finding of changed files, leading to much shorter iteration times, especially on large projects with lots of files
+
+1.0.3 (April 6, 2018)
+
+    Bugfix: when linking fails, it will now be retried without having to modify a file first
+    Feature: added support for files built remotely using FASTBuild
+    Feature: added UI setting for overriding linker paths
+    Feature: added UI setting for clearing logs on recompiles
+    Feature: added UI settings for disabling the use of compiler and linker environments
+
+1.0.2 (April 4, 2018)
+
+    Feature: workaround for WriteProcessMemory slowdown in Windows 10 SDK
+
+1.0.1 (March 29, 2018)
+
+    Bugfix: pre- and post-patch hooks would sometimes be discarded by the compiler (VS2015 and newer)
+    Feature: added free sample application included in trial version
+
+1.0.0 (March 27, 2018)
+
+    initial release
