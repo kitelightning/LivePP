@@ -6,6 +6,8 @@
 #include "IPluginManager.h"
 #include "CoreDelegates.h"
 #include "LogMacros.h"
+#include "CommandLine.h"
+#include "LivePPSettings.h"
 
 DEFINE_LOG_CATEGORY(LogLPP)
 
@@ -16,6 +18,7 @@ DEFINE_LOG_CATEGORY(LogLPP)
 
 FSimpleMulticastDelegate FLivePPModule::PrePatchHook;
 FSimpleMulticastDelegate FLivePPModule::PostPatchHook;
+
 
 namespace {
     void lppPrePatchHookShim()
@@ -29,15 +32,20 @@ namespace {
     }
 }
 
-//TODO: ikrimae: #ThirdParty-LivePP: Uncomment after testing. Not really sure if there's even a need for it. 
-//                        Maybe to mark that hotreload happened and to prevent saving over uassets?
-//LPP_PREPATCH_HOOK(lppPrePatchHookShim);
-//LPP_POSTPATCH_HOOK(lppPostPatchHookShim);
+LPP_PREPATCH_HOOK(lppPrePatchHookShim);
+LPP_POSTPATCH_HOOK(lppPostPatchHookShim);
 
 void FLivePPModule::StartupModule()
 {
     if (IsRunningCommandlet())
-    { return;    }
+    { return; }
+
+    const ULivePPSettings* lppCfg = GetDefault<ULivePPSettings>();
+
+    bool bOverrideEnableLpp = true;
+    FParse::Bool(FCommandLine::Get(), TEXT("lppEnable="), bOverrideEnableLpp);    
+    if (!bOverrideEnableLpp || !lppCfg->bEnable)
+    { return; }
 
     // Get the base directory of this plugin
     FString baseDir    = IPluginManager::Get().FindPlugin("LivePP").IsValid() ? IPluginManager::Get().FindPlugin("LivePP")->GetBaseDir() : "";
@@ -70,67 +78,56 @@ void FLivePPModule::StartupModule()
 
     //Register all game modules
     {
-        TArray<FModuleStatus> ModuleStatuses;
-        FModuleManager::Get().QueryModules(ModuleStatuses);
         const FString gameBinaryDir = FPaths::ConvertRelativePathToFull(FModuleManager::Get().GetGameBinariesDirectory());
 
+        auto hookModule = [this,gameBinaryDir,lppCfg, moduleFilter = (ELPPHookFilter)lppCfg->moduleFilter](FName InModuleName, EModuleChangeReason InChangeReason) {
+            if (InChangeReason != EModuleChangeReason::ModuleLoaded)
+            { return; }
+
+            FModuleStatus ModuleStatus;
+            if (!FModuleManager::Get().QueryModule(InModuleName, ModuleStatus))
+            { return; }
+
+            const bool bShouldHook =
+                   EnumHasAllFlags(moduleFilter, ELPPHookFilter::All)
+                || EnumHasAllFlags(moduleFilter, ELPPHookFilter::Game)        && (ModuleStatus.bIsGameModule                                               )
+                || EnumHasAllFlags(moduleFilter, ELPPHookFilter::GameProject) && (FPaths::IsSamePath(gameBinaryDir, FPaths::GetPath(ModuleStatus.FilePath)))
+                || EnumHasAllFlags(moduleFilter, ELPPHookFilter::CoreEngine)  && (lppCfg->CoreEngineModuleNames.Contains(InModuleName)                )
+                || EnumHasAllFlags(moduleFilter, ELPPHookFilter::CoreEditor)  && (lppCfg->CoreEditorModuleNames.Contains(InModuleName)                )
+                || EnumHasAllFlags(moduleFilter, ELPPHookFilter::CustomList)  && (lppCfg->CustomModuleNames.Contains(InModuleName)                    );
+
+            if (bShouldHook)
+            {
+                if (lppCfg->bUseAsyncModuleLoad)
+                {
+                        if (lppCfg->bHookImports) { lppAsyncLoadTokens.Add(lpp::lppEnableAllModulesAsync(static_cast<HMODULE>(lppHModule), *ModuleStatus.FilePath)); }
+                    else                          { lppAsyncLoadTokens.Add(lpp::lppEnableModuleAsync(static_cast<HMODULE>(lppHModule), *ModuleStatus.FilePath)); }
+                }
+                else
+                {
+                        if (lppCfg->bHookImports) { lpp::lppEnableAllModulesSync(static_cast<HMODULE>(lppHModule), *ModuleStatus.FilePath); }
+                    else                          { lpp::lppEnableModuleSync(static_cast<HMODULE>(lppHModule), *ModuleStatus.FilePath); }
+                }
+            }
+        };
+        
+        TArray<FModuleStatus> ModuleStatuses;
+        FModuleManager::Get().QueryModules(ModuleStatuses);
         for (const FModuleStatus& ModuleStatus : ModuleStatuses)
         {
             if (!ModuleStatus.bIsLoaded)
             { continue; }
 
-            const bool bShouldHook =
-                   EnumHasAllFlags(moduelFilter, ELPPHookFilter::All)
-                || EnumHasAllFlags(moduelFilter, ELPPHookFilter::Game)        && (ModuleStatus.bIsGameModule                                               )
-                || EnumHasAllFlags(moduelFilter, ELPPHookFilter::GameProject) && (FPaths::IsSamePath(gameBinaryDir, FPaths::GetPath(ModuleStatus.FilePath)))
-                || EnumHasAllFlags(moduelFilter, ELPPHookFilter::CoreEngine)  && (CoreEngineModuleNames.Contains(ModuleStatus.Name)                        )
-                || EnumHasAllFlags(moduelFilter, ELPPHookFilter::CoreEditor)  && (CoreEditorModuleNames.Contains(ModuleStatus.Name)                        )
-                || EnumHasAllFlags(moduelFilter, ELPPHookFilter::CustomList)  && (CustomModuleNames.Contains(ModuleStatus.Name)                            );
-
-            if (bShouldHook)
-            {
-                if (bUseAsyncModuleLoad)
-                {
-                        if (bHookImports) { lppAsyncLoadTokens.Add(lpp::lppEnableAllModulesAsync(static_cast<HMODULE>(lppHModule), *ModuleStatus.FilePath)); }
-                    else                  { lppAsyncLoadTokens.Add(lpp::lppEnableModuleAsync(static_cast<HMODULE>(lppHModule), *ModuleStatus.FilePath)); }
-                }
-                else
-                {
-                        if (bHookImports) { lpp::lppEnableAllModulesSync(static_cast<HMODULE>(lppHModule), *ModuleStatus.FilePath); }
-                    else                  { lpp::lppEnableModuleSync(static_cast<HMODULE>(lppHModule), *ModuleStatus.FilePath); }
-                }
-            }
+            hookModule(FName(*ModuleStatus.Name), EModuleChangeReason::ModuleLoaded);
         }
 
-        //syncModuleLoadHandle = FCoreDelegates::OnBeginFrame.AddLambda([this] {
-        //    
-        //
-        //
-        //    //Dangerous but ¯\_(ツ)_/¯; make sure to keep as the last line in the lambda as removal
-        //    //will destroy the stack of the lambda
-        //    FCoreDelegates::OnBeginFrame.Remove(syncModuleLoadHandle);
-        //});
-
-        //// Defer Level Editor UI extensions until Level Editor has been loaded:
-        //if (FModuleManager::Get().IsModuleLoaded("LevelEditor"))
-        //{
-        //    //Register post engine stuff        
-        //}
-        //else
-        //{
-        //    FModuleManager::Get().OnModulesChanged().AddLambda([this, ThePlugin](FName name, EModuleChangeReason reason)
-        //    {
-        //        if ((name == "LevelEditor") && (reason == EModuleChangeReason::ModuleLoaded))
-        //        {
-        //            //Register post engine stuff
-        //        }
-        //    });
-        //}
+        onModulesChangedDelegate = FModuleManager::Get().OnModulesChanged().AddLambda(hookModule);
     }
+
 
     //Set up syncpoint delegates
     {
-        switch (lppHotReloadSyncPoint)
+        switch (lppCfg->lppHotReloadSyncPoint)
         {
         case ELPPSyncPointLocation::EngineBeginFrame:
             syncPointHandle = FCoreDelegates::OnBeginFrame.AddLambda([this] {
@@ -172,9 +169,17 @@ void FLivePPModule::ShutdownModule()
         FCoreDelegates::OnEndFrame.Remove(syncPointHandle);
     }
 
+    if (onModulesChangedDelegate.IsValid())
+    {
+        FModuleManager::Get().OnModulesChanged().Remove(onModulesChangedDelegate);
+    }
+
     // Usually don't need to do this but here incase we want to enable turning on/off L++
-    FPlatformProcess::FreeDllHandle(lppHModule);
-    lppHModule = nullptr;
+    if (lppHModule)
+    {
+        FPlatformProcess::FreeDllHandle(lppHModule);
+        lppHModule = nullptr;
+    }
 }
 
 #include "HideWindowsPlatformTypes.h"

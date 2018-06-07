@@ -113,7 +113,6 @@ public class LivePP : ModuleRules
 			{
 				"Core",
                 "LPPExternalLib",
-				"Projects"
 			}
 			);
 			
@@ -121,6 +120,9 @@ public class LivePP : ModuleRules
 		PrivateDependencyModuleNames.AddRange(
 			new string[]
 			{
+                "Engine",
+                "CoreUObject",
+                "Projects",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
