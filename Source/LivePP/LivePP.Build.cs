@@ -19,8 +19,9 @@ public class LivePP : ModuleRules
         checkAndWarn(!Target.bOmitPCDebugInfoInDevelopment, "!Target.bOmitPCDebugInfoInDevelopment");
         checkAndWarn(!Target.bDisableDebugInfo,             "!Target.bDisableDebugInfo"            );
         checkAndWarn(!Target.bAllowLTCG,                    "!Target.bAllowLTCG"                   );
+        checkAndWarn(!Target.bUseFastPDBLinking,            "!Target.bUseFastPDBLinking"           );
 
-        //TODO: ikrimae: #ThirdParty-LivePP: Future L++ feature - Should be enabled if UHT hooking is implemented in L++
+        //NOTE: #ThirdParty-LivePP: Future L++ feature - Should be enabled if UHT hooking is implemented in L++
         //checkAndWarn(!Target.bDisableDebugInfoForGeneratedCode, "!Target.bDisableDebugInfoForGeneratedCode");
 
         //NOTE: UBT Extensions - These have to be placed inside of UBT in SetupEnvironment(). There's no longer a mechanism to control this from game modules or targets
