@@ -24,7 +24,7 @@ UE4 Plugin Features:
   
 
 Tested Configuration:
-  - LPP 1.0.2
+  - LPP 1.2.5
   - UE4.19
   - Win64
   - In UE4 Editor
@@ -40,12 +40,14 @@ How to Use
 			 - You will manually have to rebuild the entire solution if you want to hotreload engine modules
 
 		B. Extend UBT Target rules (this is the 4.20 change coming):
-			 -TargetRules class:
+			 -TargetRules.cs:TargetRules class:
 				 [RequiresUniqueBuildEnvironment]
+				 [XmlConfigFile(Category = "BuildConfiguration")]
 				 public string AdditionalCompilerArguments;
 				 [RequiresUniqueBuildEnvironment]
-			 -ReadOnlyTargetRules class:
+				 [XmlConfigFile(Category = "BuildConfiguration")]
 				 public string AdditionalLinkerArguments;
+			 -ReadOnlyTargetRules class:
 				 public string AdditionalCompilerArguments
 				 {
 					 get { return Inner.AdditionalCompilerArguments; }
