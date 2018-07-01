@@ -63,6 +63,12 @@ How to Use
 			 -Your game target.cs file:
 				 AdditionalCompilerArguments = "/Gw";
 				 AdditionalLinkerArguments   = "/FUNCTIONPADMIN";
+	 **NOTE:** UBT support for UniqueBuildEnvironment doesn't work  if you're game is not in a subdirectory of the UnrealEngine. Your best bet is to modify the buildconfiguration.xml(https://docs.unrealengine.com/en-US/Programming/UnrealBuildSystem/Configuration) file instead of yourgame.target.cs:
+	 
+		<BuildConfiguration>
+		<AdditionalCompilerArguments> /Gw </AdditionalCompilerArguments>
+		<AdditionalLinkerArguments> /FUNCTIONPADMIN </AdditionalLinkerArguments>
+		</BuildConfiguration>
 
 2. Clone this repo into your engine or game plugins directory (eg Plugins\LivePP)
 
