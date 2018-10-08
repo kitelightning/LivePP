@@ -24,7 +24,7 @@ UE4 Plugin Features:
   
 
 Tested Configuration:
-  - LPP 1.2.5
+  - LPP 1.3.1
   - UE4.19
   - Win64
   - In UE4 Editor
@@ -40,14 +40,12 @@ How to Use
 			 - You will manually have to rebuild the entire solution if you want to hotreload engine modules
 
 		B. Extend UBT Target rules (this is the 4.20 change coming):
-			 -TargetRules.cs:TargetRules class:
+			 -TargetRules class:
 				 [RequiresUniqueBuildEnvironment]
-				 [XmlConfigFile(Category = "BuildConfiguration")]
 				 public string AdditionalCompilerArguments;
 				 [RequiresUniqueBuildEnvironment]
-				 [XmlConfigFile(Category = "BuildConfiguration")]
-				 public string AdditionalLinkerArguments;
 			 -ReadOnlyTargetRules class:
+				 public string AdditionalLinkerArguments;
 				 public string AdditionalCompilerArguments
 				 {
 					 get { return Inner.AdditionalCompilerArguments; }
@@ -63,12 +61,6 @@ How to Use
 			 -Your game target.cs file:
 				 AdditionalCompilerArguments = "/Gw";
 				 AdditionalLinkerArguments   = "/FUNCTIONPADMIN";
-	 **NOTE:** UBT support for UniqueBuildEnvironment doesn't work  if you're game is not in a subdirectory of the UnrealEngine. Your best bet is to modify the buildconfiguration.xml(https://docs.unrealengine.com/en-US/Programming/UnrealBuildSystem/Configuration) file instead of yourgame.target.cs:
-	 
-		<BuildConfiguration>
-		<AdditionalCompilerArguments> /Gw </AdditionalCompilerArguments>
-		<AdditionalLinkerArguments> /FUNCTIONPADMIN </AdditionalLinkerArguments>
-		</BuildConfiguration>
 
 2. Clone this repo into your engine or game plugins directory (eg Plugins\LivePP)
 

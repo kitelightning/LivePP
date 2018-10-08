@@ -19,7 +19,7 @@ public class LivePP : ModuleRules
         checkAndWarn(!Target.bOmitPCDebugInfoInDevelopment, "!Target.bOmitPCDebugInfoInDevelopment");
         checkAndWarn(!Target.bDisableDebugInfo,             "!Target.bDisableDebugInfo"            );
         checkAndWarn(!Target.bAllowLTCG,                    "!Target.bAllowLTCG"                   );
-        checkAndWarn(!Target.bUseFastPDBLinking,            "!Target.bUseFastPDBLinking"           );
+        checkAndWarn(!(Target.bUseFastPDBLinking.GetValueOrDefault(false)),            "!Target.bUseFastPDBLinking"           );
 
         //NOTE: #ThirdParty-LivePP: Future L++ feature - Should be enabled if UHT hooking is implemented in L++
         //checkAndWarn(!Target.bDisableDebugInfoForGeneratedCode, "!Target.bDisableDebugInfoForGeneratedCode");
@@ -95,7 +95,7 @@ public class LivePP : ModuleRules
 		
 		PublicIncludePaths.AddRange(
 			new string[] {
-				"LivePP/Public"
+				//"LivePP/Public"
 				// ... add public include paths required here ...
 			}
 			);
