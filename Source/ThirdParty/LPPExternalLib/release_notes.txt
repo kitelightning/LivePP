@@ -1,5 +1,31 @@
 Live++ Release Notes: https://molecular-matters.com/products_livepp_release_notes.html
 
+ 1.3.2 (November 22, 2018)
+
+    Bugfix: improved information in About dialog in case hardware ID doesn't match
+    Bugfix: updated documentation regarding continuous compilation
+    Feature: UI setting for keeping Live++ in the system tray
+    Feature: updated documentation regarding natvis debug visualizers
+
+1.3.1 (September 24, 2018)
+
+    Bugfix: improved behaviour and error reporting when launching Live++ executable directly
+    Bugfix: fixed possible unresponsiveness when re-compiling while process is halted in debugger
+    Feature: updated documentation regarding license activation
+
+1.3.0 (July 11, 2018)
+
+    Roadmap feature: support for LLVM LLD
+    Roadmap feature: installing code patches while process is halted in debugger
+    Roadmap feature: exception handler for installing code patches on fatal exceptions
+    Bugfix: handling of C++ catch-clauses in 64-bit applications
+    Feature: improved reconstruction of symbols and dynamic initializers
+    Feature: performance improvement when loading and reconstructing COFF files
+    Feature: unloading and disabling of modules
+    Feature: automatic recognition of Visual Studio compilers and linkers when overriding paths
+    Feature: new compile hooks
+    Feature: support for external build systems
+
 1.2.5 (May 30, 2018)
 
     Bugfix: workaround for incremental Windows API slowdown when enumerating thread instruction pointers

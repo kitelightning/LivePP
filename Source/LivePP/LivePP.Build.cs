@@ -14,12 +14,12 @@ public class LivePP : ModuleRules
         System.Action<bool,string> checkAndWarn = (bCondition, buildFlag) => { if (!bCondition) { System.Console.WriteLine("LPP: Build Environment Flag is incorrect: {0} == false", buildFlag); } };
 
         //Ensure PDBs are generated
-        //TODO: ikrimae: #ThirdParty-LivePP: This is generating a false negative so disabling
-        //checkAndWarn(Target.bUsePDBFiles,                   "Target.bUsePDBFiles"                  );
-        checkAndWarn(!Target.bOmitPCDebugInfoInDevelopment, "!Target.bOmitPCDebugInfoInDevelopment");
-        checkAndWarn(!Target.bDisableDebugInfo,             "!Target.bDisableDebugInfo"            );
-        checkAndWarn(!Target.bAllowLTCG,                    "!Target.bAllowLTCG"                   );
-        checkAndWarn(!(Target.bUseFastPDBLinking.GetValueOrDefault(false)),            "!Target.bUseFastPDBLinking"           );
+        checkAndWarn(!Target.bUsePDBFiles,                                  "!Target.bUsePDBFiles");
+        checkAndWarn(!Target.bOmitPCDebugInfoInDevelopment,                 "!Target.bOmitPCDebugInfoInDevelopment");
+        checkAndWarn(!Target.bDisableDebugInfo,                             "!Target.bDisableDebugInfo"            );
+        checkAndWarn(!Target.bAllowLTCG,                                    "!Target.bAllowLTCG"                   );
+        checkAndWarn(!(Target.bUseFastPDBLinking.GetValueOrDefault(false)), "!Target.bUseFastPDBLinking"           );
+        checkAndWarn(!Target.bSupportEditAndContinue,                       "!Target.bSupportEditAndContinue");
 
         //NOTE: #ThirdParty-LivePP: Future L++ feature - Should be enabled if UHT hooking is implemented in L++
         //checkAndWarn(!Target.bDisableDebugInfoForGeneratedCode, "!Target.bDisableDebugInfoForGeneratedCode");
