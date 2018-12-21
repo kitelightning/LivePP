@@ -84,7 +84,7 @@ Usage instructions
 		AdditionalLinkerArguments   = "/FUNCTIONPADMIN";
 		```
 
-	**NOTE:** UBT support for UniqueBuildEnvironment doesn't work if you're game is not in a subdirectory of the UnrealEngine. Your best bet is to modify the buildconfiguration.xml(https://docs.unrealengine.com/en-US/Programming/UnrealBuildSystem/Configuration) file instead of `Game.Target.cs`:
+	**NOTE:** UBT support for UniqueBuildEnvironment doesn't work well if your game is not in a subdirectory of the UnrealEngine (e.g. UE_4.XX/Games where UE_4.XX is your UnrealEngine root director that has UE_4.XX/Engine, UE_4.XX/FeaturePacks, etc").  Your best bet is to follow Option A even for 4.20+ and modify the buildconfiguration.xml(https://docs.unrealengine.com/en-US/Programming/UnrealBuildSystem/Configuration) file instead of `Game.Target.cs`:
 
 	```
 	<BuildConfiguration>
