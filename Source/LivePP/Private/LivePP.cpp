@@ -1,20 +1,21 @@
-﻿// Copyright Kite & Lightning
+// Copyright Kite & Lightning
 
 #include "LivePP.h"
 #include "Core.h"
-#include "ModuleManager.h"
-#include "IPluginManager.h"
-#include "CoreDelegates.h"
-#include "LogMacros.h"
-#include "CommandLine.h"
+#include "Modules/ModuleManager.h"
+#include "Interfaces/IPluginManager.h"
+#include "Misc/CoreDelegates.h"
+#include "Logging/LogMacros.h"
+#include "Misc/CommandLine.h"
 #include "LivePPSettings.h"
 
 DEFINE_LOG_CATEGORY(LogLPP)
 
 #define LOCTEXT_NAMESPACE "FLivePPModule"
 
-#include "AllowWindowsPlatformTypes.h"
+#include "Windows/AllowWindowsPlatformTypes.h"
 #include "LPP_API.h"
+#include "Containers/StringConv.h"
 
 FSimpleMulticastDelegate FLivePPModule::PrePatchHook;
 FSimpleMulticastDelegate FLivePPModule::PostPatchHook;
@@ -74,7 +75,7 @@ void FLivePPModule::StartupModule()
         return;
     }
 
-    lpp::lppRegisterProcessGroup(static_cast<HMODULE>(lppHModule), "QuickStart");
+    lpp::lppRegisterProcessGroup(static_cast<HMODULE>(lppHModule), TCHAR_TO_ANSI(FPlatformProcess::ExecutableName()));
 
     //Register all game modules
     {
@@ -182,7 +183,7 @@ void FLivePPModule::ShutdownModule()
     }
 }
 
-#include "HideWindowsPlatformTypes.h"
+#include "Windows/HideWindowsPlatformTypes.h"
 
 #undef LOCTEXT_NAMESPACE
     

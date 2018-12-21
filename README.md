@@ -29,7 +29,6 @@ Tested Configuration:
   - Plugin as a game project plugin
 
 Usage instructions
-------------------
 
 1. Enable VS required compilation flags:
 

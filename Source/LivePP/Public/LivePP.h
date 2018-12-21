@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "ModuleManager.h"
-#include <EnumClassFlags.h>
+#include "Modules/ModuleManager.h"
+#include "Misc/EnumClassFlags.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogLPP, Log, All);
 
