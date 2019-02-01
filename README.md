@@ -22,8 +22,8 @@ UE4 Plugin Features:
 - Plugin is disabled from running in commandlet mode.
 
 Tested Configuration:
-  - Live++ 1.2.5 - 1.3.0
-  - UE 4.19 - 4.20
+  - Live++ 1.2.5 - 1.3.3
+  - UE 4.19 - 4.21.2
   - Win64
   - In UE4 Editor
   - Plugin as a game project plugin
@@ -111,7 +111,7 @@ Usage instructions
 4. Enable the LivePP plugin:
 
 	- In your `Game.Build.cs` file add: `PrivateDependencyModuleNames.Add("LivePP");`
-	- Build and launch the editor and navigate to the Project Settings, scroll down to Plugins -> LivePP and check the `Enable` box.
+	- Build and launch the editor and navigate to the Project Settings, scroll down to Plugins -> LivePP and check the `Enable` box. By default, it is set to false so if you checkin the plugin, it won't attempt to load itself on every team members computer. Enable setting is persisted to your local machine only (EditorPerProjectUserSettings)
 
 5. Optional suggestions:
 
