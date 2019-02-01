@@ -1,5 +1,13 @@
 Live++ Release Notes: https://molecular-matters.com/products_livepp_release_notes.html
 
+ 1.3.3 (January 28, 2019)
+
+    Bugfix: possible crash when registering modules using relative paths
+    Bugfix: increased CPU usage when opening and closing applications belonging to the same Live++ instance
+    Bugfix: hashing of module headers for identifying identical modules
+    Feature: added compiler command-line to development log
+    Feature: optimized logging performance
+
  1.3.2 (November 22, 2018)
 
     Bugfix: improved information in About dialog in case hardware ID doesn't match

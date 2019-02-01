@@ -1,6 +1,8 @@
 // Copyright Kite & Lightning
 
 using UnrealBuildTool;
+using System;
+using System.IO;
 
 public class LivePP : ModuleRules
 {
@@ -95,45 +97,45 @@ public class LivePP : ModuleRules
 		
 		PublicIncludePaths.AddRange(
 			new string[] {
-				//"LivePP/Public"
+                //Path.Combine(ModuleDirectory, "Public"),
 				// ... add public include paths required here ...
 			}
-			);
+		);
 				
 		
 		PrivateIncludePaths.AddRange(
 			new string[] {
-				"LivePP/Private",
+                Path.Combine(ModuleDirectory, "Private"),
 				// ... add other private include paths required here ...
 			}
-			);
-			
-		
-		PublicDependencyModuleNames.AddRange(
-			new string[]
-			{
+		);
+
+        //PrivateIncludePathModuleNames.AddRange(new string[] {
+        //    "EditorModule",
+        //});
+
+
+        PublicDependencyModuleNames.AddRange(
+			new string[] {
 				"Core",
                 "LPPExternalLib",
 			}
-			);
-			
+		);			
 		
 		PrivateDependencyModuleNames.AddRange(
-			new string[]
-			{
+			new string[] {
                 "Engine",
                 "CoreUObject",
                 "Projects",
 				// ... add private dependencies that you statically link with here ...	
 			}
-			);
+		);
 		
 		
 		DynamicallyLoadedModuleNames.AddRange(
-			new string[]
-			{
+			new string[] {
 				// ... add any modules that your module loads dynamically here ...
 			}
-			);
+		);
 	}
 }
