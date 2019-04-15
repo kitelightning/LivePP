@@ -1,5 +1,9 @@
 ![](Resources/Icon128.png)
 
+# Good News Everyone: Natively integrated in UE4.22+
+
+Details here: https://docs.unrealengine.com/en-us/Builds/4_22
+
 # UE4 LivePP: C/C++ live coding
 
 A UE4 plugin wrapper for the amazing Molecular Matter's Live++ Hot-Reloading Library. (https://molecular-matters.com/products_livepp.html).
